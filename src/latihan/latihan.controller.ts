@@ -9,9 +9,12 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { LatihanService } from './latihan.service';
 
 @Controller('latihan')
 export class LatihanController {
+  constructor(private latihanService: LatihanService) {}
+
   @Get()
   findAll(@Query() query: any) {
     return {
@@ -57,5 +60,10 @@ export class LatihanController {
     return {
       id,
     };
+  }
+
+  @Get('say-hello')
+  sayHello() {
+    return this.latihanService.sayHello();
   }
 }

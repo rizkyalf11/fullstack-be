@@ -1,0 +1,2 @@
+GET http://localhost:5002/latihan/say-hello
+Content-Type: application/json
