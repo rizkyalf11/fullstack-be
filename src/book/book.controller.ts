@@ -1,5 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-import { BookService } from './book.service';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { BookService, createBookDto } from './book.service';
 
 @Controller('book')
 export class BookController {
@@ -8,5 +8,10 @@ export class BookController {
   @Get('/list')
   findAllBook() {
     return this.bookService.getAllBooks();
+  }
+
+  @Post('/create')
+  createBook(@Body() payload: createBookDto) {
+    this.bookService.create(payload);
   }
 }

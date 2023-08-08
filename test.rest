@@ -1,2 +1,8 @@
-GET http://localhost:5002/latihan/say-hello
+POST http://localhost:5002/book/create
 Content-Type: application/json
+
+{
+  "title": "miko",
+  "author": "miko",
+  "year": 2022,
+}
