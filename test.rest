@@ -9,3 +9,11 @@ Content-Type: application/json
 ###
 GET http://localhost:5002/auth/profile
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtYSI6InJpemt5IGEiLCJlbWFpbCI6InJpemt5QGdtYWlsLmNvbSIsImlhdCI6MTY5MTQ2MjYzOSwiZXhwIjoxNjkxNTQ5MDM5fQ.CmrMyqzAyrgF0EITM9LNEeRpcWdNFGZaUe1Egm2tcJY
+
+###
+POST http://localhost:5002/auth/lupa-password
+Content-Type: application/json
+
+{
+  "email": "rizky@gmail.com"
+}

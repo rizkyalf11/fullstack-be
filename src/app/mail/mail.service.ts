@@ -10,7 +10,7 @@ export class MailService {
     await this.mailService.sendMail({
       to: payload.email,
       subject: 'Lupa Password', // subject pada email
-      template: './lupa_password', // template yang digunakan adalah lupa_password, kita bisa memembuat template yang lain
+      template: './lupa_password.hbs', // template yang digunakan adalah lupa_password, kita bisa memembuat template yang lain
       context: {
         link: payload.link,
         name: payload.name,

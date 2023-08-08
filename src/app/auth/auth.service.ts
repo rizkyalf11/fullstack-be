@@ -123,6 +123,7 @@ export class AuthService extends BaseResponse {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
+
     const token = randomBytes(32).toString('hex'); // membuat token
     const link = `http://localhost:5002/auth/reset-password/${user.id}/${token}`; //membuat link untuk reset password
     await this.mailService.sendForgotPassword({

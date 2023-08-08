@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwt_config } from 'src/config/jwt.config';
 import { JwtStrategy } from './jwt.strategy';
 import { ResetPassword } from './reset_password.entity';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ResetPassword } from './reset_password.entity';
         expiresIn: jwt_config.expired,
       },
     }),
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

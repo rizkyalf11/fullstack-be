@@ -24,4 +24,10 @@ export class AuthController {
     const { id } = req.user;
     return this.authService.myProfile(id);
   }
+
+  @Post('lupa-password')
+  async forgotPassowrd(@Body('email') email: string) {
+    console.log('email', email);
+    return this.authService.forgotPassword(email);
+  }
 }

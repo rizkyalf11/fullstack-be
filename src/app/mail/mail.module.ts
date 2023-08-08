@@ -12,7 +12,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         port: 2525,
         auth: {
           user: '0d7e2352dfc419',
-          pass: '********44b4',
+          pass: '27621a3a0844b4',
         },
       },
       defaults: {
