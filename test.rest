@@ -3,12 +3,12 @@ Content-Type: application/json
 
 {
   "email": "rizky@gmail.com",
-  "password": "12345678"
+  "password": "0987654321"
 }
 
 ###
 GET http://localhost:5002/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtYSI6InJpemt5IGEiLCJlbWFpbCI6InJpemt5QGdtYWlsLmNvbSIsImlhdCI6MTY5MTQ2MjYzOSwiZXhwIjoxNjkxNTQ5MDM5fQ.CmrMyqzAyrgF0EITM9LNEeRpcWdNFGZaUe1Egm2tcJY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtYSI6InJpemt5IGEiLCJlbWFpbCI6InJpemt5QGdtYWlsLmNvbSIsImlhdCI6MTY5MTQ2NjQ4NywiZXhwIjoxNjkxNTUyODg3fQ.SXlGwAcMGuTmGc_oU2jtgst0UDBxrZ4aG0rh8Me-rtM
 
 ###
 POST http://localhost:5002/auth/lupa-password
@@ -16,4 +16,12 @@ Content-Type: application/json
 
 {
   "email": "rizky@gmail.com"
+}
+
+###
+POST http://localhost:5002/auth/reset-password/1/8cf772475b10e824553b465d16c0d2f407405fa7b78f38956fb7d73e373a1e6d
+Content-Type: application/json
+
+{
+  "new_password": "0987654321"
 }

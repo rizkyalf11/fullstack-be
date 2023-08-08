@@ -1,6 +1,14 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto } from './auth.dto';
+import { LoginDto, RegisterDto, ResetPasswordDto } from './auth.dto';
 import { JwtGuard } from './auth.guard';
 
 @Controller('auth')
@@ -29,5 +37,14 @@ export class AuthController {
   async forgotPassowrd(@Body('email') email: string) {
     console.log('email', email);
     return this.authService.forgotPassword(email);
+  }
+
+  @Post('reset-password/:user_id/:token') // url yang dibuat pada endpont harus sama dengan ketika kita membuat link pada service forgotPassword
+  async resetPassword(
+    @Param('user_id') user_id: string,
+    @Param('token') token: string,
+    @Body() payload: ResetPasswordDto,
+  ) {
+    return this.authService.resetPassword(+user_id, token, payload);
   }
 }
