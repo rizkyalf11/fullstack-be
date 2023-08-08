@@ -125,7 +125,7 @@ export class AuthService extends BaseResponse {
     }
 
     const token = randomBytes(32).toString('hex'); // membuat token
-    const link = `http://localhost:5002/auth/reset-password/${user.id}/${token}`; //membuat link untuk reset password
+    const link = `${process.env.BASE_CLIENT_URL}/auth/reset-password/${user.id}/${token}`; //membuat link untuk reset password
     await this.mailService.sendForgotPassword({
       email: email,
       name: user.nama,
