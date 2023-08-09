@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 export interface createBookDto {
   id?: number;
@@ -46,5 +46,22 @@ export class BookService {
       status: 'Success',
       message: 'Data Berhasil Ditambah',
     };
+  }
+
+  findBookById(id: number): number {
+    const bookIndex = this.books.findIndex((book) => book.id === id);
+
+    if (bookIndex === -1) {
+      throw new NotFoundException(`Buku dengan id ${id} tidak ditemukan`);
+    }
+
+    return bookIndex;
+  }
+
+  getDetail(id: number): createBookDto {
+    const bookIndex = this.findBookById(id);
+    const book = this.books[bookIndex];
+
+    return book;
   }
 }
