@@ -64,4 +64,36 @@ export class BookService {
 
     return book;
   }
+
+  updateBook(
+    id: number,
+    title: string,
+    author: string,
+    year: number,
+  ): {
+    status: string;
+    message: string;
+  } {
+    const bookIndex = this.books.findIndex((book) => book.id === id);
+    this.books[bookIndex].title = title;
+    this.books[bookIndex].author = author;
+    this.books[bookIndex].year = year;
+
+    return {
+      status: 'Success',
+      message: 'Berhasil update buku',
+    };
+  }
+
+  deleteBook(id: number): {
+    status: string;
+    message: string;
+  } {
+    const bookIndex = this.findBookById(id);
+    this.books.splice(bookIndex, 1);
+    return {
+      status: `Success ${bookIndex}`,
+      message: 'Berhasil menghapus buku',
+    };
+  }
 }
