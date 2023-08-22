@@ -30,6 +30,7 @@ export class AuthController {
   async profile(@Req() req) {
     // hasil validate dari jwt strategy akan ditambakan pada req.user. isi object req.user akan sama dengan payload dari jwt token. Silahkan coba console.log(req.user)
     const { id } = req.user;
+    console.log(req.user);
     return this.authService.myProfile(id);
   }
 

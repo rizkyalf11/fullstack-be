@@ -36,9 +36,9 @@ export class KategoriService extends BaseResponse {
     const { page, pageSize, limit, nama_kategori } = query;
 
     const filterQuery = {};
-    if (nama_kategori) {
-      filterQuery.nama_kategori = Like(`%${nama_kategori}%`);
-    }
+    // if (nama_kategori) {
+    //   filterQuery.nama_kategori = Like(`%${nama_kategori}%`);
+    // }
     const total = await this.kategoriRepository.count({
       where: filterQuery,
     });

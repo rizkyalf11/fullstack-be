@@ -88,7 +88,7 @@ export class AuthService extends BaseResponse {
     } else {
       throw new HttpException(
         'email dan password tidak sama',
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.NOT_FOUND,
       );
     }
   }
