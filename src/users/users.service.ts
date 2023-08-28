@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ResponseSuccess } from 'src/interface/response';
 
 @Injectable()
 export class UsersService {
@@ -32,10 +33,7 @@ export class UsersService {
     return this.users;
   };
 
-  createUsers(payload: any): {
-    status: string,
-    message: string
-  } {
+  createUsers(payload: any): ResponseSuccess {
     const { nama, email, umur, tanggal_lahir, status} = payload;
 
     this.users.push({
@@ -67,7 +65,7 @@ export class UsersService {
     return userIndex;
   }
 
-  updateUser(id: number, payload: any): {status: string, message: string} {
+  updateUser(id: number, payload: any): ResponseSuccess {
     const { nama, email, umur, tanggal_lahir, status} = payload;
     const userIndex = this.findUserById(id)
 
@@ -83,7 +81,7 @@ export class UsersService {
     }
   }
 
-  deleteUser(id: number): {status: string, message: string} {
+  deleteUser(id: number): ResponseSuccess {
     const userIndex = this.findUserById(id);
 
     this.users.splice(userIndex, 1);

@@ -7,7 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { BookService, createBookDto } from './book.service';
+import { BookService } from './book.service';
+import { CreateBookDto } from './book.dto';
 
 @Controller('book')
 export class BookController {
@@ -19,7 +20,7 @@ export class BookController {
   }
 
   @Post('/create')
-  createBook(@Body() payload: createBookDto) {
+  createBook(@Body() payload: CreateBookDto) {
     return this.bookService.create(payload);
   }
 

@@ -1,11 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-
-export interface createBookDto {
-  id?: number;
-  title: string;
-  author: string;
-  year: number;
-}
+import { CreateBookDto } from './book.dto';
 
 @Injectable()
 export class BookService {
@@ -32,7 +26,7 @@ export class BookService {
     return this.books;
   }
 
-  create(payload: createBookDto): { status: string; message: string } {
+  create(payload: CreateBookDto): { status: string; message: string } {
     const { title, author, year } = payload;
 
     this.books.push({
@@ -58,7 +52,7 @@ export class BookService {
     return bookIndex;
   }
 
-  getDetail(id: number): createBookDto {
+  getDetail(id: number): CreateBookDto {
     const bookIndex = this.findBookById(id);
     const book = this.books[bookIndex];
 
