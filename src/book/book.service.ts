@@ -19,7 +19,7 @@ export class BookService extends BaseResponse {
     super();
   }
 
-  async getAllBooks(query: FindBookDto): Promise<ResponsePagination> {
+  async getAllBooks(query: FindBookDto): Promise<any> {
     const { page, pageSize, limit, title, author, from_year, to_year } = query;
 
     const total = await this.bookRepository.count();
@@ -49,7 +49,7 @@ export class BookService extends BaseResponse {
       take: pageSize,
     });
 
-    return this._pagination('OK', result, total, page, pageSize);
+    return result;
   }
 
   async createBook(createBookDto: CreateBookDto): Promise<ResponseSuccess> {
