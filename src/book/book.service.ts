@@ -1,8 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateBookDto } from './book.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Book } from './book.entity';
+import { Repository } from 'typeorm';
+import { ResponseSuccess } from 'src/interface/response';
 
 @Injectable()
 export class BookService {
+  constructor(
+    @InjectRepository(Book) private readonly bookRepository: Repository<Book>,
+  ) {}
+
   private books: {
     id?: number;
     title: string;
@@ -17,29 +30,33 @@ export class BookService {
     },
   ];
 
-  getAllBooks(): {
-    id?: number;
-    title: string;
-    author: string;
-    year: number;
-  }[] {
-    return this.books;
+  async getAllBooks(): Promise<ResponseSuccess> {
+    const result = await this.bookRepository.find();
+    return {
+      message: 'Berhasil',
+      status: '200',
+      data: result,
+    };
   }
 
-  create(payload: CreateBookDto): { status: string; message: string } {
-    const { title, author, year } = payload;
+  async create(payload: CreateBookDto): Promise<ResponseSuccess> {
+    try {
+      const { title, author, year } = payload;
 
-    this.books.push({
-      id: new Date().getTime(),
-      title,
-      author,
-      year,
-    });
+      const newBook = await this.bookRepository.save({
+        title,
+        author,
+        year,
+      });
 
-    return {
-      status: 'Success',
-      message: 'Data Berhasil Ditambah',
-    };
+      return {
+        status: 'Success',
+        message: 'Data Berhasil Ditambah',
+        data: newBook,
+      };
+    } catch (error) {
+      throw new HttpException('Ada Kesalahan', HttpStatus.BAD_REQUEST);
+    }
   }
 
   findBookById(id: number): number {
