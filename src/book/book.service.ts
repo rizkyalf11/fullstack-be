@@ -43,11 +43,12 @@ export class BookService extends BaseResponse {
       filter.year = Between(from_year, from_year);
     }
 
-    const result = await this.bookRepository.find({
-      where: filter,
-      skip: limit,
-      take: pageSize,
-    });
+    const result = await this.bookRepository.find();
+    // const result = await this.bookRepository.find({
+    //   where: filter,
+    //   skip: limit,
+    //   take: pageSize,
+    // });
 
     return result;
   }
@@ -67,7 +68,7 @@ export class BookService extends BaseResponse {
     }
   }
 
-  async getDetail(id: number): Promise<ResponseSuccess> {
+  async getDetail(id: number): Promise<any> {
     const detailBook = await this.bookRepository.findOne({
       where: {
         id,
@@ -77,11 +78,8 @@ export class BookService extends BaseResponse {
     if (detailBook === null) {
       throw new NotFoundException(`Buku dengan id ${id} tidak ditemukan`);
     }
-    return {
-      status: 'Success',
-      message: 'Detail Buku ditermukan',
-      data: detailBook,
-    };
+
+    return detailBook;
   }
 
   async updateBook(
@@ -116,7 +114,7 @@ export class BookService extends BaseResponse {
       throw new NotFoundException(`Buku dengan id ${id} tidak ditemukan`);
     await this.bookRepository.delete(id);
     return {
-      status: `Success `,
+      status: `Success`,
       message: 'Berhasil menghapus buku',
     };
   }
