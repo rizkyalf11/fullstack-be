@@ -1,5 +1,6 @@
 import { OmitType } from '@nestjs/mapped-types';
 import { Type } from 'class-transformer';
+import { PageRequestDto } from 'src/utils/dto/page.dto';
 import {
   IsInt,
   IsNotEmpty,
@@ -7,8 +8,10 @@ import {
   Max,
   Length,
   IsOptional,
+  IsArray,
+  ValidateNested,
 } from 'class-validator';
-import { PageRequestDto } from 'src/utils/dto/page.dto';
+
 export class BookDto {
   id: number;
 
@@ -27,6 +30,7 @@ export class BookDto {
 
 export class CreateBookDto extends OmitType(BookDto, ['id']) {}
 export class UpdateBookDto extends OmitType(BookDto, ['id']) {}
+
 export class FindBookDto extends PageRequestDto {
   @IsOptional()
   title: string;
@@ -43,4 +47,11 @@ export class FindBookDto extends PageRequestDto {
   @IsInt()
   @Type(() => Number)
   to_year: number;
+}
+
+export class createBookArrayDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateBookDto)
+  data: CreateBookDto[];
 }

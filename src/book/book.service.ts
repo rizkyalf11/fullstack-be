@@ -5,7 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ResponsePagination, ResponseSuccess } from 'src/interface/response';
-import { CreateBookDto, FindBookDto, UpdateBookDto } from './book.dto';
+import {
+  CreateBookDto,
+  FindBookDto,
+  UpdateBookDto,
+  createBookArrayDto,
+} from './book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from './book.entity';
 import { Between, Like, Repository } from 'typeorm';
@@ -19,9 +24,8 @@ export class BookService extends BaseResponse {
     super();
   }
 
-  async getAllBooks(query: FindBookDto): Promise<any> {
+  async getAllBooks(query: FindBookDto): Promise<ResponsePagination> {
     const { page, pageSize, limit, title, author, from_year, to_year } = query;
-
     const total = await this.bookRepository.count();
 
     const filter: {
@@ -43,14 +47,13 @@ export class BookService extends BaseResponse {
       filter.year = Between(from_year, from_year);
     }
 
-    const result = await this.bookRepository.find();
-    // const result = await this.bookRepository.find({
-    //   where: filter,
-    //   skip: limit,
-    //   take: pageSize,
-    // });
+    const result = await this.bookRepository.find({
+      where: filter,
+      skip: limit,
+      take: pageSize,
+    });
 
-    return result;
+    return this._pagination('OK', result, total, page, pageSize);
   }
 
   async createBook(createBookDto: CreateBookDto): Promise<ResponseSuccess> {
@@ -68,7 +71,7 @@ export class BookService extends BaseResponse {
     }
   }
 
-  async getDetail(id: number): Promise<any> {
+  async getDetail(id: number): Promise<ResponseSuccess> {
     const detailBook = await this.bookRepository.findOne({
       where: {
         id,
@@ -79,7 +82,11 @@ export class BookService extends BaseResponse {
       throw new NotFoundException(`Buku dengan id ${id} tidak ditemukan`);
     }
 
-    return detailBook;
+    return {
+      status: 'Success',
+      message: 'Detail Buku ditermukan',
+      data: detailBook,
+    };
   }
 
   async updateBook(
@@ -119,12 +126,12 @@ export class BookService extends BaseResponse {
     };
   }
 
-  async bulkCreate(payload: CreateBookDto[]): Promise<ResponseSuccess> {
+  async bulkCreate(payload: createBookArrayDto): Promise<ResponseSuccess> {
     try {
       let berhasil = 0;
       let gagal = 0;
       await Promise.all(
-        payload.map(async (data) => {
+        payload.data.map(async (data) => {
           try {
             await this.bookRepository.save(data);
 

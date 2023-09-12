@@ -33,7 +33,7 @@ export class KategoriService extends BaseResponse {
   }
 
   async getAllCategory(query: findAllKategori): Promise<ResponsePagination> {
-    const { page, pageSize, limit, nama_kategori } = query;
+    const { page, pageSize, nama_kategori } = query;
 
     const filterQuery = {};
     // if (nama_kategori) {
@@ -58,7 +58,7 @@ export class KategoriService extends BaseResponse {
           nama: true,
         },
       },
-      skip: limit,
+      // skip: limit,
       take: pageSize,
     });
 

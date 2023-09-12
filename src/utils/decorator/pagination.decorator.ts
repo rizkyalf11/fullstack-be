@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const Pagination = createParamDecorator(
@@ -14,9 +13,10 @@ export const Pagination = createParamDecorator(
       request.query.pageSize = 10;
     }
 
-    request.limit = (Number(request.query.page) - 1) * Number(request.query.pageSize);
-    request.pageSize = Number(request.query.pageSize);
-    request.page = Number(request.query.page);
+    request.limit =
+      (Number(request.query.page) - 1) * Number(request.query.pageSize);
+    request.query.pageSize = Number(request.query.pageSize);
+    request.query.page = Number(request.query.page);
     return request.query;
   },
 );

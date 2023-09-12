@@ -8,7 +8,12 @@ import {
   Put,
 } from '@nestjs/common';
 import { BookService } from './book.service';
-import { CreateBookDto, FindBookDto, UpdateBookDto } from './book.dto';
+import {
+  CreateBookDto,
+  FindBookDto,
+  UpdateBookDto,
+  createBookArrayDto,
+} from './book.dto';
 import { Pagination } from 'src/utils/decorator/pagination.decorator';
 
 @Controller('book')
@@ -41,7 +46,7 @@ export class BookController {
   }
 
   @Post('/create/bulk')
-  bulkCreateBook(@Body() payload: CreateBookDto[]) {
+  bulkCreateBook(@Body() payload: createBookArrayDto) {
     return this.bookService.bulkCreate(payload);
   }
 }

@@ -1,4 +1,7 @@
+import { HttpStatus } from '@nestjs/common';
+
 export interface ResponseSuccess {
+  statusCode?: HttpStatus;
   status: string;
   message: string;
   data?: any;
