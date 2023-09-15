@@ -1,9 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { ResponseSuccess } from 'src/interface/response';
+import { User } from './users.entity';
+import { Repository } from 'typeorm';
+import { createUsersDto, updateUsersDto } from './users.dto';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(User) private readonly userService: Repository<User>
+  ) {}
   private users: {
     id?: number;
     nama: string;
@@ -22,86 +29,82 @@ export class UsersService {
     },
   ];
 
-  getAllUsers(): {
-    id? : number,
-    nama : string,
-    email : string,
-    umur : number,
-    tanggal_lahir : string,
-    status : string
-  }[] {
-    return this.users;
+  async getAllUsers(): Promise<ResponseSuccess> {
+    const result = await this.userService.find();
+    return {
+      message: 'Berhasil',
+      status: '200',
+      data: result
+    }
   };
 
-  createUsers(payload: any): ResponseSuccess {
+  async createUsers(payload: createUsersDto): Promise<ResponseSuccess> {
     const { nama, email, umur, tanggal_lahir, status} = payload;
 
-    this.users.push({
-      id: this.getLastIndex(),
-      nama,
-      email,
-      umur,
-      tanggal_lahir,
-      status,
+    try {
+      const newUser = await this.userService.save({
+        nama,
+        email,
+        umur,
+        tanggal_lahir,
+        status
+      })
+  
+      return {
+        status: 'Success',
+        message: 'Data Berhasil Di Tambah',
+        data: newUser
+      }
+    } catch (error) {
+      throw new HttpException('Ada Kesalahan', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async updateUser(id: number, payload: updateUsersDto): Promise<ResponseSuccess> {
+    const check = await this.userService.findOne({
+      where: {
+        id: id
+      }
     })
+    
+    if (!check)
+      throw new NotFoundException(`Buku dengan id ${id} tidak ditemukan`);
+
+      const update = await this.userService.save({ ...payload, id: id });
+      return {
+        status: `Success `,
+        message: 'Buku berhasil di update',
+        data: update,
+      };
+  }
+
+  async deleteUser(id: number): Promise<ResponseSuccess> {
+    const user = await this.userService.findOne({where: {id: id}});
+
+    if (user === null) {
+      throw new NotFoundException(`Buku dengan id ${id} tidak ditemukan`);
+    }
+
+    await this.userService.delete(id)
 
     return {
-      status: 'Success',
-      message: 'Data Berhasil Di Tambah',
+      message: 'Data Dihapus',
+      status: '200',
+      data: user
     }
   }
 
-  getLastIndex() {
-    return this.users.length + 1
-  }
+  async getDetail(id: number): Promise<ResponseSuccess> {
+    const user = await this.userService.findOne({where: {id: id}});
 
-  findUserById(id: number): number {
-    const userIndex = this.users.findIndex((user) => user.id === id);
-
-    if (userIndex === -1) {
-      throw new NotFoundException(`User dengan id ${id} tidak ditemukan`);
+    if (user === null) {
+      throw new NotFoundException(`Buku dengan id ${id} tidak ditemukan`);
     }
-
-    return userIndex;
-  }
-
-  updateUser(id: number, payload: any): ResponseSuccess {
-    const { nama, email, umur, tanggal_lahir, status} = payload;
-    const userIndex = this.findUserById(id)
-
-    this.users[userIndex].nama = nama;
-    this.users[userIndex].email = email;
-    this.users[userIndex].umur = umur;
-    this.users[userIndex].tanggal_lahir = tanggal_lahir;
-    this.users[userIndex].status = status;
 
     return {
-      status: 'Success',
-      message: `Buku dengan id ${id} berhasil di update`,
+      message: 'Data ditemukan',
+      status: '200',
+      data: user
     }
-  }
-
-  deleteUser(id: number): ResponseSuccess {
-    const userIndex = this.findUserById(id);
-
-    this.users.splice(userIndex, 1);
-
-    return {
-      status: 'success',
-      message: `Data dengan id ${id} berhasil di delete`
-    }
-  }
-
-  getDetail(id: number): {
-    id? : number,
-    nama : string,
-    email : string,
-    umur : number,
-    tanggal_lahir : string,
-    status : string
-  } {
-    const userIndex = this.findUserById(id);
-
-    return this.users[userIndex];
   }
 }
