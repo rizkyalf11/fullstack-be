@@ -5,7 +5,15 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
+  app.useGlobalPipes(new ValidationPipe({ 
+    whitelist: true,
+    forbidUnknownValues: true,
+    transform: true,
+    validateCustomDecorators: true,
+    transformOptions: {
+      enableImplicitConversion: true,
+    }, 
+  }))
   await app.listen(5002);
 }
 bootstrap();
