@@ -12,6 +12,6 @@ export interface ResponsePagination extends ResponseSuccess {
     total: number;
     page: number;
     pageSize: number;
-    totalPage?: number;
+    totalPage: number;
   };
 }

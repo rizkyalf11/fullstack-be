@@ -15,12 +15,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from './book.entity';
 import { Between, Like, Repository } from 'typeorm';
 import { ResponsePagination, ResponseSuccess } from 'src/interface/response';
+import BaseResponse from 'src/utils/response/base.response';
 
 @Injectable()
-export class BookService {
+export class BookService extends BaseResponse {
   constructor(
     @InjectRepository(Book) private readonly bookRepository: Repository<Book>,
-  ) {}
+  ) {
+    super();
+  }
 
   async getAllBooks(query: FindBookDto): Promise<ResponsePagination> {
     const { page, pageSize, limit, author, from_year, title, to_year } = query;
@@ -50,17 +53,7 @@ export class BookService {
       take: pageSize,
     });
 
-    return {
-      message: 'Berhasil',
-      status: '200',
-      data: result,
-      pagination: {
-        total: total,
-        page: page,
-        pageSize: pageSize,
-        totalPage: Math.ceil(total / pageSize),
-      },
-    };
+    return this._pagination('OK', result, total, page, pageSize);
   }
 
   async create(payload: CreateBookDto): Promise<ResponseSuccess> {
@@ -73,11 +66,7 @@ export class BookService {
         year,
       });
 
-      return {
-        status: 'Success',
-        message: 'Data Berhasil Ditambah',
-        data: newBook,
-      };
+      return this._success('OK');
     } catch (error) {
       throw new HttpException('Ada Kesalahan', HttpStatus.BAD_REQUEST);
     }
