@@ -55,10 +55,7 @@ export class AuthService extends BaseResponse {
       );
     }
 
-    const checkPassword = await compare(
-      payload.password,
-      checkUserExists.password,
-    ); // compare password yang dikirim dengan password yang ada di tabel
+    const checkPassword = compare(payload.password, checkUserExists.password); // compare password yang dikirim dengan password yang ada di tabel
 
     if (checkPassword) {
       const jwtPayload: jwtPayload = {
@@ -102,5 +99,15 @@ export class AuthService extends BaseResponse {
       secret: token,
       expiresIn: expiresIn,
     });
+  }
+
+  async myProfile(id: number): Promise<ResponseSuccess> {
+    const user = await this.authRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    return this._success('OK', user);
   }
 }
