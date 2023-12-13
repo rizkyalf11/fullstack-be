@@ -1,7 +1,16 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto } from './auth.dto';
-import { JwtGuard } from './auth.guard';
+import { LoginDto, RegisterDto, ResetPasswordDto } from './auth.dto';
+import { JwtGuard, JwtGuardRefreshToken } from './auth.guard';
+import { MailService } from '../mail/mail.service';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +32,28 @@ export class AuthController {
     // hasil validate dari jwt strategy akan ditambakan pada req.user. isi object req.user akan sama dengan payload dari jwt token. Silahkan coba console.log(req.user)
     const { id } = req.user;
     return this.authService.myProfile(id);
+  }
+
+  @UseGuards(JwtGuardRefreshToken)
+  @Get('refresh-token')
+  async refreshToken(@Req() req) {
+    const token = req.headers.authorization.split(' ')[1];
+    const id = req.headers.id;
+    return this.authService.refreshToken(+id, token);
+  }
+
+  @Post('lupa-password')
+  async forgotPassowrd(@Body('email') email: string) {
+    console.log('email', email);
+    return this.authService.forgotPassword(email);
+  }
+
+  @Post('lupa-password/:user_id/:token') // url yang dibuat pada endpont harus sama dengan ketika kita membuat link pada service forgotPassword
+  async resetPassword(
+    @Param('user_id') user_id: string,
+    @Param('token') token: string,
+    @Body() payload: ResetPasswordDto,
+  ) {
+    return this.authService.resetPassword(+user_id, token, payload);
   }
 }

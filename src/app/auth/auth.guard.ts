@@ -11,6 +11,7 @@ export class JwtGuard extends AuthGuard('jwt_access_token') {
     if (err || !user) {
       throw err || new UnauthorizedException();
     }
+
     return user;
   }
 }

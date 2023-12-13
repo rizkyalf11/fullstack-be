@@ -1,27 +1,37 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+} from 'typeorm';
+import { ResetPassword } from './reset_password.entity';
 
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true, type: 'varchar' })
+  @Column({ nullable: true })
   avatar: string;
 
-  @Column({ nullable: false, type: 'varchar' })
+  @Column({ nullable: false })
   nama: string;
 
-  @Column({ unique: true, nullable: false, type: 'varchar' })
+  @Column({ unique: true, nullable: false })
   email: string;
 
-  @Column({ nullable: true, type: 'varchar' })
+  @Column({ nullable: true })
   password: string;
 
-  @Column({ nullable: true, type: 'varchar' })
+  @Column({ nullable: true })
   refresh_token: string;
 
-  @Column({ nullable: true, type: 'varchar' })
+  @Column({ nullable: true })
   role: string;
+
+  @OneToMany(() => ResetPassword, (reset) => reset.user) // buat relasi one to many dengan tabel reset password
+  reset_password: ResetPassword;
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
