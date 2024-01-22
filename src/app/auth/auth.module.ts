@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './auth.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { jwt_config } from 'src/config/jwt.config';
 import { JwtAccessTokenStrategy } from './jwtAccessToken.strategy';
 import { JwtRefreshTokenStrategy } from './jwtRefreshToken.strategy';
 import { ResetPassword } from './reset_password.entity';
