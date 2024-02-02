@@ -17,20 +17,23 @@ import {
 import { ResponsePagination, ResponseSuccess } from 'src/interface/response';
 import { Like, Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
+import { User } from '../auth/auth.entity';
 
 @Injectable()
 export class KategoriService extends BaseResponse {
   constructor(
     @InjectRepository(Kategori)
     private readonly kategoriRepo: Repository<Kategori>,
+    @InjectRepository(User) private userRepo: Repository<User>,
     @Inject(REQUEST) private req: any, // inject request agar bisa mengakses req.user.id dari  JWT token pada service
   ) {
     super();
   }
 
   async create(payload: CreateKategoriDto): Promise<ResponseSuccess> {
+    console.log('py2', payload);
     try {
-      await this.kategoriRepo.save(payload);
+      // await this.kategoriRepo.save(payload);
 
       return this._success('OK', payload.created_by.id);
     } catch {
@@ -39,16 +42,25 @@ export class KategoriService extends BaseResponse {
   }
 
   async getAllCategory(query: findAllKategori): Promise<ResponsePagination> {
-    const { page, pageSize, limit, nama_kategori } = query;
+    const { page, pageSize, limit, nama_kategori, nama_user } = query;
+    console.log('uqw', query);
 
     const filterQuery: { [key: string]: any } = {};
 
     if (nama_kategori) {
       filterQuery.nama_kategori = Like(`%${nama_kategori}%`);
     }
+
+    if (nama_user) {
+      filterQuery.created_by = {
+        nama: Like(`%${nama_user}%`),
+      };
+    }
+
     const total = await this.kategoriRepo.count({
       where: filterQuery,
     });
+
     const result = await this.kategoriRepo.find({
       where: filterQuery,
       relations: ['created_by', 'updated_by'], // relasi yang aka ditampilkan saat menampilkan list kategori
@@ -157,5 +169,24 @@ export class KategoriService extends BaseResponse {
       );
 
     return this._success('Kategori Berhasil Ditemukan', check);
+  }
+
+  async userCategory() {
+    const user = await this.userRepo.findOne({
+      where: {
+        id: this.req.user.id,
+      },
+      relations: ['kategori_created_by, kategori_updated_by'],
+      select: {
+        id: true,
+        nama: true,
+        kategori_created_by: {
+          id: true,
+          nama_kategori: true,
+        },
+      },
+    });
+
+    return this._success('ok', user);
   }
 }

@@ -19,6 +19,7 @@ import { JwtGuard } from '../auth/auth.guard';
 import { Pagination } from 'src/utils/decorator/pagination.decorator';
 import { InjectCreatedBy } from 'src/utils/decorator/inject-created_by.decorator';
 import { InjectUpdatedBy } from 'src/utils/decorator/inject-updated_by.decorator';
+import { InjectBulkCreatedBy } from 'src/utils/decorator/inject-bulk-created_by.decorator';
 
 @UseGuards(JwtGuard) //  implementasikan global guard pada semua endpont kategori memerlukan authentikasi saat request
 @Controller('kategori')
@@ -36,6 +37,11 @@ export class KategoriController {
     return this.kategoriService.getAllCategory(query);
   }
 
+  @Get('detail/:id')
+  findOneBook(@Param('id') id: string) {
+    return this.kategoriService.detailKategori(Number(id));
+  }
+
   @Put('update/:id')
   updateKategori(
     @Param('id') id: string,
@@ -45,7 +51,8 @@ export class KategoriController {
   }
 
   @Post('create-bulk')
-  bulkCreateKategori(@Body() payload: createKategoriArrayDto) {
+  bulkCreateKategori(@InjectBulkCreatedBy() payload: createKategoriArrayDto) {
+    // console.log(payload);
     return this.kategoriService.bulkCreate(payload);
   }
 
@@ -57,5 +64,10 @@ export class KategoriController {
   @Get('detail/:id')
   getDetail(@Param('id') id: string) {
     return this.kategoriService.detailKategori(Number(id));
+  }
+
+  @Get('user/lisy')
+  getUserCategory() {
+    return this.kategoriService.userCategory();
   }
 }
