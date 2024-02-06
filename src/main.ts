@@ -16,5 +16,6 @@ async function bootstrap() {
   }))
   app.enableCors()
   await app.listen(5002);
+  console.log('run 5002')
 }
 bootstrap();

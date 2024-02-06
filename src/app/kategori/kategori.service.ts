@@ -176,7 +176,7 @@ export class KategoriService extends BaseResponse {
       where: {
         id: this.req.user.id,
       },
-      relations: ['kategori_created_by, kategori_updated_by'],
+      relations: ['kategori_created_by', 'kategori_updated_by'],
       select: {
         id: true,
         nama: true,

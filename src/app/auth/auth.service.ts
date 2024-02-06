@@ -140,9 +140,8 @@ export class AuthService extends BaseResponse {
       },
     });
 
-    console.log('user', checkUserExists);
-
     if (checkUserExists === null) {
+      console.log('yes');
       throw new UnauthorizedException();
     }
 
@@ -190,12 +189,14 @@ export class AuthService extends BaseResponse {
       );
     }
     const token = randomBytes(32).toString('hex'); // membuat token
-    const link = `http://localhost:5002/auth/lupa-password/${user.id}/${token}`; //membuat link untuk reset password
+    const linkBe = `http://localhost:5002/auth/lupa-password/${user.id}/${token}`; //membuat link untuk reset password
+    const linkFe = `http://localhost:3001/auth/reset-pw/${user.id}/${token}`; //membuat link untuk reset password
 
     await this.mailService.sendForgotPassword({
       email: email,
       name: user.nama,
-      link: link,
+      linkBe,
+      linkFe,
     });
 
     const payload = {

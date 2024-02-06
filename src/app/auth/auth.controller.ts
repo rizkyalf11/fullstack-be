@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, ResetPasswordDto } from './auth.dto';
 import { JwtGuard, JwtGuardRefreshToken } from './auth.guard';
 import { MailService } from '../mail/mail.service';
+import { ChildEntity } from 'typeorm';
 
 @Controller('auth')
 export class AuthController {
@@ -44,7 +45,6 @@ export class AuthController {
 
   @Post('lupa-password')
   async forgotPassowrd(@Body('email') email: string) {
-    console.log('email', email);
     return this.authService.forgotPassword(email);
   }
 

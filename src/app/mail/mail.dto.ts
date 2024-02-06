@@ -1,5 +1,6 @@
 export class MailResetPasswordDto {
-  link: string;
+  linkBe: string;
+  linkFe: string;
   name: string;
   email: string;
 }

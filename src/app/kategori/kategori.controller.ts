@@ -66,7 +66,7 @@ export class KategoriController {
     return this.kategoriService.detailKategori(Number(id));
   }
 
-  @Get('user/lisy')
+  @Get('user/list')
   getUserCategory() {
     return this.kategoriService.userCategory();
   }

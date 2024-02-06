@@ -12,7 +12,8 @@ export class MailService {
       subject: 'Lupa Password', // subject pada email
       template: './lupa_password', // template yang digunakan adalah lupa_password, kita bisa memembuat template yang lain
       context: {
-        link: payload.link,
+        linkBe: payload.linkBe,
+        linkFe: payload.linkFe,
         name: payload.name,
       },
     });

@@ -34,10 +34,10 @@ export class User extends BaseEntity {
   @OneToMany(() => ResetPassword, (reset) => reset.user) // buat relasi one to many dengan tabel reset password
   reset_password: ResetPassword;
 
-  @OneToMany(() => Kategori, (v) => v.created_by)
+  @OneToMany(() => Kategori, (kategori) => kategori.created_by)
   kategori_created_by: Kategori[];
 
-  @OneToMany(() => Kategori, (v) => v.updated_by)
+  @OneToMany(() => Kategori, (kategori) => kategori.updated_by)
   kategori_updated_by: Kategori[];
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
