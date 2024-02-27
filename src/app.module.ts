@@ -9,9 +9,15 @@ import { AuthModule } from './app/auth/auth.module';
 import { MailModule } from './app/mail/mail.module';
 import { KategoriModule } from './app/kategori/kategori.module';
 import { ProdukModule } from './app/produk/produk.module';
+import { UploadController } from './app/upload/upload.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     TypeOrmModule.forRoot(typeOrmConfig),
     LatihanModule,
     BookModule,
@@ -20,7 +26,7 @@ import { ProdukModule } from './app/produk/produk.module';
     KategoriModule,
     ProdukModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, UploadController],
   providers: [AppService],
 })
 export class AppModule {}

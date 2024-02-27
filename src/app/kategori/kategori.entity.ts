@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../auth/auth.entity';
+import { User, UserGoogle } from '../auth/auth.entity';
 
 @Entity()
 export class Kategori extends BaseEntity {
@@ -23,6 +23,14 @@ export class Kategori extends BaseEntity {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'updated_by' }) //buat relasi many to one  dengan table user
   updated_by: User;
+
+  @ManyToOne(() => UserGoogle) // Tambahkan relasi ManyToOne dengan UserGoogle
+  @JoinColumn({ name: 'created_by_google' }) // Nama kolom untuk kunci luar ke UserGoogle
+  created_by_google: UserGoogle;
+
+  @ManyToOne(() => UserGoogle) // Tambahkan relasi ManyToOne dengan UserGoogle
+  @JoinColumn({ name: 'updated_by_google' }) // Nama kolom untuk kunci luar ke UserGoogle
+  updated_by_google: UserGoogle;
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;

@@ -8,6 +8,7 @@ export class JwtGuard extends AuthGuard('jwt_access_token') {
   }
 
   handleRequest(err, user) {
+    console.log(err, user);
     if (err || !user) {
       throw err || new UnauthorizedException();
     }

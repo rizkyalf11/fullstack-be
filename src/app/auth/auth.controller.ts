@@ -8,10 +8,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto, ResetPasswordDto } from './auth.dto';
+import {
+  LoginDto,
+  LoginWIthGoogleDTO,
+  RegisterDto,
+  ResetPasswordDto,
+} from './auth.dto';
 import { JwtGuard, JwtGuardRefreshToken } from './auth.guard';
-import { MailService } from '../mail/mail.service';
-import { ChildEntity } from 'typeorm';
+// import { MailService } from '../mail/mail.service';
+// import { ChildEntity } from 'typeorm';
 
 @Controller('auth')
 export class AuthController {
@@ -27,11 +32,27 @@ export class AuthController {
     return this.authService.login(payload);
   }
 
+  @Post('logingoogle')
+  async loginwithgoogle(@Body() payload: LoginWIthGoogleDTO) {
+    return this.authService.loginWithGoogle(payload);
+  }
+
+  @Get('getgoogledata/:id')
+  async getData(@Param('id') id: string) {
+    return this.authService.getDataloginGoogle(id);
+  }
+
+  @Post('tesdoang')
+  async hehe(@Body('token') token: string) {
+    return this.authService.tesDoang(token);
+  }
+
   @UseGuards(JwtGuard) // impelementasi guard pada route , hal ini berarti endpoint profile hanya bisa diakses jika client membawa token
   @Get('profile')
   async profile(@Req() req) {
     // hasil validate dari jwt strategy akan ditambakan pada req.user. isi object req.user akan sama dengan payload dari jwt token. Silahkan coba console.log(req.user)
     const { id } = req.user;
+    console.log(req.user);
     return this.authService.myProfile(id);
   }
 
