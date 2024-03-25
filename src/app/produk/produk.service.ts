@@ -119,7 +119,8 @@ export class ProdukService extends BaseResponse {
 
     const result = await this.produkRepository.find({
       where: keyword ? filterKeyword : filterQuery,
-      relations: ['created_by', 'updated_by', 'kategori'],
+      relations: ['created_by', 'kategori'],
+      // relations: ['created_by', 'updated_by', 'kategori'],
       select: {
         id: true,
         nama_produk: true,
@@ -134,10 +135,10 @@ export class ProdukService extends BaseResponse {
           id: true,
           nama: true,
         },
-        updated_by: {
-          id: true,
-          nama: true,
-        },
+        // updated_by: {
+        //   id: true,
+        //   nama: true,
+        // },
       },
       skip: limit,
       take: pageSize,

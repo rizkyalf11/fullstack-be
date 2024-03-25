@@ -33,7 +33,7 @@ export class KategoriService extends BaseResponse {
   async create(payload: CreateKategoriDto): Promise<ResponseSuccess> {
     console.log('py2', payload);
     try {
-      // await this.kategoriRepo.save(payload);
+      await this.kategoriRepo.save(payload);
 
       return this._success('OK', payload.created_by.id);
     } catch {

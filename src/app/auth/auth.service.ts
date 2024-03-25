@@ -13,6 +13,7 @@ import {
   LoginWIthGoogleDTO,
   RegisterDto,
   ResetPasswordDto,
+  UpdateAvatarDto,
 } from './auth.dto';
 import { ResponseSuccess } from 'src/interface/response';
 import { compare, hash } from 'bcrypt';
@@ -50,6 +51,19 @@ export class AuthService extends BaseResponse {
     await this.authRepository.save(payload);
 
     return this._success('Register Berhasil');
+  }
+
+  async updateProfile(
+    id: number,
+    payload: UpdateAvatarDto,
+  ): Promise<ResponseSuccess> {
+    const update = await this.authRepository.save({
+      nama: payload.nama,
+      avatar: payload.avatar,
+      id: id,
+    });
+
+    return this._success('Update Success', update);
   }
 
   async login(payload: LoginDto): Promise<ResponseSuccess> {
@@ -106,7 +120,7 @@ export class AuthService extends BaseResponse {
         ...checkUserExists,
         access_token: access_token,
         refresh_token: refresh_token,
-        role: 'siswa',
+        role: 'admin',
       });
     } else {
       throw new HttpException(
@@ -217,6 +231,7 @@ export class AuthService extends BaseResponse {
   }
 
   async refreshToken(id: number, token: string): Promise<ResponseSuccess> {
+    console.log('resresh token');
     const checkUserExists = await this.authRepository.findOne({
       where: {
         id: id,

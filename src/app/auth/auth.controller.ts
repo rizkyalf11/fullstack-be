@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import {
   LoginWIthGoogleDTO,
   RegisterDto,
   ResetPasswordDto,
+  UpdateAvatarDto,
 } from './auth.dto';
 import { JwtGuard, JwtGuardRefreshToken } from './auth.guard';
 // import { MailService } from '../mail/mail.service';
@@ -76,5 +78,12 @@ export class AuthController {
     @Body() payload: ResetPasswordDto,
   ) {
     return this.authService.resetPassword(+user_id, token, payload);
+  }
+
+  @UseGuards(JwtGuard) // impelementasi guard pada route , hal ini berarti endpoint profile hanya bisa diakses jika client membawa token
+  @Put('profile/update')
+  async updateProfile(@Body() payload: UpdateAvatarDto, @Req() req) {
+    const { id } = req.user;
+    return this.authService.updateProfile(+id, payload);
   }
 }

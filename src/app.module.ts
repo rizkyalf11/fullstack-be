@@ -12,6 +12,8 @@ import { ProdukModule } from './app/produk/produk.module';
 import { UploadController } from './app/upload/upload.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { KonsumenModule } from './app/konsumen/konsumen.module';
+import { UniqueValidator } from './utils/validator/unique.validator';
 
 @Module({
   imports: [
@@ -25,8 +27,9 @@ import { join } from 'path';
     MailModule,
     KategoriModule,
     ProdukModule,
+    KonsumenModule,
   ],
   controllers: [AppController, UploadController],
-  providers: [AppService],
+  providers: [AppService, UniqueValidator],
 })
 export class AppModule {}

@@ -64,6 +64,12 @@ export class RegisterDto extends PickType(UserDto, [
   'password',
 ]) {}
 
+export class UpdateAvatarDto extends PickType(UserDto, [
+  'id',
+  'avatar',
+  'nama',
+]) {}
+
 export class LoginDto extends PickType(UserDto, ['email', 'password']) {}
 
 export class ResetPasswordDto {

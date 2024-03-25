@@ -9,7 +9,8 @@ export const Pagination = createParamDecorator(
       request.query.page = 1;
     }
     if (request.query.pageSize === undefined) {
-      request.query.pageSize = 10;
+      // request.query.pageSize = 10;
+      request.query.pageSize = 100;
     }
 
     request.query.limit = (Number(request.query.page) - 1) * Number(request.query.pageSize);
