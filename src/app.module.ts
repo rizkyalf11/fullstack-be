@@ -14,6 +14,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { KonsumenModule } from './app/konsumen/konsumen.module';
 import { UniqueValidator } from './utils/validator/unique.validator';
+import { OrderModule } from './app/order/order.module';
+import { OrderDetailModule } from './app/order_detail/order_detail.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { UniqueValidator } from './utils/validator/unique.validator';
     KategoriModule,
     ProdukModule,
     KonsumenModule,
+    OrderModule,
+    OrderDetailModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, UniqueValidator],

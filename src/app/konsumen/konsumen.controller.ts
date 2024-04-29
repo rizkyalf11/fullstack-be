@@ -3,7 +3,6 @@ import { KonsumenService } from './konsumen.service';
 import { InjectCreatedBy } from 'src/utils/decorator/inject-created_by.decorator'; //import disini
 import { CreateKonsumenDto, findAllKonsumenDto } from './konsumen.dto';
 import { JwtGuard } from 'src/app/auth/auth.guard';
-import { query } from 'express';
 
 @UseGuards(JwtGuard)
 @Controller('konsumen')

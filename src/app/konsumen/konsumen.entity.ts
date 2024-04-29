@@ -6,7 +6,9 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { Order } from '../order/order.entity';
 
 @Entity()
 export class Konsumen extends BaseEntity {
@@ -32,6 +34,12 @@ export class Konsumen extends BaseEntity {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'updated_by' })
   updated_by: User;
+
+  @OneToMany(() => Order, (v) => v.konsumen, {
+    onDelete: 'CASCADE',
+    cascade: ['insert', 'update'],
+  })
+  order: Order[];
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
