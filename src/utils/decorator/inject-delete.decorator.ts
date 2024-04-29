@@ -1,10 +1,10 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const InjectCreatedBy = createParamDecorator(
+export const InjectDeleted = createParamDecorator(
   (data: any, ctx: ExecutionContext) => {
     const req = ctx.switchToHttp().getRequest();
 
-    req.body.created_by_id = { id: req.user.id };
+    req.body.deleted_by = { id: req.user.id };
 
     return req.body;
   },

@@ -12,6 +12,8 @@ import { ProdukModule } from './app/produk/produk.module';
 import { UploadController } from './app/upload/upload.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { UserUtsModule } from './app/uts/user-uts/user-uts.module';
+import { BookUtsModule } from './app/book-uts/book-uts.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { join } from 'path';
     MailModule,
     KategoriModule,
     ProdukModule,
+    UserUtsModule,
+    BookUtsModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService],
