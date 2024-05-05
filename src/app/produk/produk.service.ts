@@ -122,6 +122,7 @@ export class ProdukService extends BaseResponse {
       relations: ['created_by', 'kategori'],
       // relations: ['created_by', 'updated_by', 'kategori'],
       select: {
+        barcode: true,
         id: true,
         nama_produk: true,
         deskripsi_produk: true,
