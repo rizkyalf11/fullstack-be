@@ -1,10 +1,16 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import BaseResponse from 'src/utils/response/base.response';
 import { Between, Like, Repository } from 'typeorm';
 import { Order } from './order.entity';
 import { ResponsePagination, ResponseSuccess } from 'src/interface/response';
-import { CreateOrderDto, findAllOrderDto } from './order.dto';
+import { CreateOrderDto, UpdateOrderDto, findAllOrderDto } from './order.dto';
 import { REQUEST } from '@nestjs/core';
 
 @Injectable()
@@ -31,8 +37,14 @@ export class OrderService extends BaseResponse {
           item.created_by = this.req.user.id;
         });
 
+      let total_bayar = 0;
+      payload.order_detail.forEach((item) => {
+        total_bayar = total_bayar + item.harga;
+      });
+
       await this.orderRepository.save({
         ...payload,
+        total_bayar: total_bayar,
         konsumen: {
           id: payload.konsumen_id,
         },
@@ -57,7 +69,11 @@ export class OrderService extends BaseResponse {
       dari_total_bayar,
       sampai_total_bayar,
       nama_konsumen,
+      sort_by,
+      order_by,
     } = query;
+
+    console.log(sort_by, order_by);
 
     const filterQuery: any = [];
 
@@ -123,7 +139,7 @@ export class OrderService extends BaseResponse {
 
         order_detail: {
           id: true,
-
+          harga: true,
           jumlah: true,
           produk: {
             nama_produk: true,
@@ -133,7 +149,106 @@ export class OrderService extends BaseResponse {
 
       skip: limit,
       take: pageSize,
+      order: {
+        [sort_by]: order_by,
+      },
     });
     return this._pagination('OK', result, total, page, pageSize);
+  }
+
+  async findById(id: number): Promise<ResponseSuccess> {
+    const result = await this.orderRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: [
+        'created_by',
+        'konsumen',
+        'order_detail',
+        'order_detail.produk',
+      ],
+      select: {
+        id: true,
+        nomor_order: true,
+        status: true,
+        total_bayar: true,
+        tanggal_order: true,
+
+        konsumen: {
+          id: true,
+          nama_konsumen: true,
+        },
+        created_by: {
+          id: true,
+          nama: true,
+        },
+
+        order_detail: {
+          id: true,
+
+          jumlah: true,
+          produk: {
+            id: true,
+            nama_produk: true,
+            harga: true,
+          },
+        },
+      },
+    });
+
+    if (result === null) {
+      throw new NotFoundException(`Order dengan id ${id} tidak ditemukan`);
+    }
+
+    console.log(result);
+
+    return this._success('OK', result);
+  }
+
+  async updateOrder(
+    id: number,
+    payload: UpdateOrderDto,
+  ): Promise<ResponseSuccess> {
+    const check = await this.orderRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!check) {
+      throw new HttpException('Data tidak ditemukan', HttpStatus.NOT_FOUND);
+    }
+
+    let total_bayar = 0;
+    payload.order_detail.forEach((item) => {
+      total_bayar = total_bayar + item.harga;
+    });
+
+    payload.order_detail &&
+      payload.order_detail.forEach((item) => {
+        item.created_by = this.req.user.id;
+      });
+
+    const order = await this.orderRepository.save({
+      ...payload,
+      total_bayar: total_bayar,
+      id: id,
+    });
+
+    return this._success('OK', order);
+  }
+
+  async deleteOrder(id: number): Promise<ResponseSuccess> {
+    const check = await this.orderRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!check)
+      throw new NotFoundException(`Buku dengan id ${id} tidak ditemukan`);
+    await this.orderRepository.delete(id);
+
+    return this._success('Berhasil menghapus buku');
   }
 }

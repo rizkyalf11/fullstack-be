@@ -51,6 +51,7 @@ export class Order extends BaseEntity {
 
   @OneToMany(() => OrderDetail, (v) => v.order, {
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
     cascade: ['insert', 'update'],
   })
   order_detail: OrderDetail[];

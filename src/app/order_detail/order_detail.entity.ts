@@ -18,7 +18,12 @@ export class OrderDetail extends BaseEntity {
   @Column({ nullable: false })
   jumlah: number;
 
-  @ManyToOne(() => Produk, (v) => v.order_detail, { onDelete: 'CASCADE' })
+  @Column({ type: 'double', precision: 18, scale: 2, nullable: true })
+  harga: number;
+
+  @ManyToOne(() => Produk, (v) => v.order_detail, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'produk_id' })
   produk: Produk;
 

@@ -34,7 +34,8 @@ export class OrderDto {
   status: Status;
 
   @IsNumber()
-  @IsNotEmpty()
+  // @IsNotEmpty()
+  @IsOptional()
   total_bayar: number;
 
   @IsNumber()

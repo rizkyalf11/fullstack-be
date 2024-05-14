@@ -11,6 +11,9 @@ export class OrderDetailDto {
   @IsObject()
   produk: { id: number };
 
+  @IsNumber()
+  harga: number;
+
   @IsObject()
   @IsOptional()
   updated_by: { id: number };

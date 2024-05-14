@@ -25,6 +25,7 @@ export class Produk extends BaseEntity {
 
   @Column({ nullable: false })
   nama_produk: string;
+
   @Column({ type: 'text', nullable: false })
   deskripsi_produk: string;
 
@@ -47,6 +48,7 @@ export class Produk extends BaseEntity {
 
   @OneToMany(() => OrderDetail, (v) => v.produk, {
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
     cascade: ['insert', 'update'],
   })
   order_detail: OrderDetail[];
