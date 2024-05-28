@@ -25,7 +25,7 @@ export class OrderDto {
   nomor_order: string;
 
   @IsDate()
-  @IsNotEmpty()
+  @IsOptional()
   tanggal_order: Date;
 
   @IsString()
@@ -34,7 +34,6 @@ export class OrderDto {
   status: Status;
 
   @IsNumber()
-  // @IsNotEmpty()
   @IsOptional()
   total_bayar: number;
 

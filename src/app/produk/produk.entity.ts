@@ -19,7 +19,7 @@ export class Produk extends BaseEntity {
   @Column({ nullable: false })
   barcode: string;
 
-  @ManyToOne(() => Kategori)
+  @ManyToOne(() => Kategori, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'kategori_id' })
   kategori: Kategori;
 
@@ -48,7 +48,6 @@ export class Produk extends BaseEntity {
 
   @OneToMany(() => OrderDetail, (v) => v.produk, {
     onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
     cascade: ['insert', 'update'],
   })
   order_detail: OrderDetail[];

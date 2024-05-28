@@ -42,6 +42,7 @@ export class KonsumenDto {
   @IsObject()
   @IsOptional()
   updated_by: { id: number };
+
   @IsObject()
   @IsOptional()
   created_by: { id: number };

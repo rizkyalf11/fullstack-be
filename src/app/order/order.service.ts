@@ -42,8 +42,14 @@ export class OrderService extends BaseResponse {
         total_bayar = total_bayar + item.harga;
       });
 
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.getFullYear()}-${String(
+        currentDate.getMonth() + 1,
+      ).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+
       await this.orderRepository.save({
         ...payload,
+        tanggal_order: formattedDate,
         total_bayar: total_bayar,
         konsumen: {
           id: payload.konsumen_id,
@@ -72,8 +78,6 @@ export class OrderService extends BaseResponse {
       sort_by,
       order_by,
     } = query;
-
-    console.log(sort_by, order_by);
 
     const filterQuery: any = [];
 
